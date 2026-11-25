@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10121b">
+  <meta name="description" content="FINORA — управление личными финансами. Доходы, расходы и бюджет в одном месте.">
+  <title>FINORA — личные финансы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow glow-a"></div><div class="glow glow-b"></div>
+  <div class="layout">
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-icon">F</span><span>FINORA</span></a>
+      <div class="nav-caption">РАБОЧЕЕ ПРОСТРАНСТВО</div>
+      <nav>
+        <button class="nav-link active" data-page="dashboard"><span>▦</span> Обзор</button>
+        <button class="nav-link" data-page="transactions"><span>⇄</span> Операции</button>
+        <button class="nav-link" data-page="budgets"><span>◈</span> Бюджет</button>
+        <button class="nav-link" data-page="admin"><span>⚙</span> Админ-панель</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="nav-caption">ПЕРСОНАЛЬНОЕ</div>
+        <button class="nav-link" data-page="profile"><span>◎</span> Профиль</button>
+        <div class="user-mini"><div class="avatar">К</div><div><b>Кирилл</b><small>Личный аккаунт</small></div><span class="online"></span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><div class="overline">ТВОЙ ФИНАНСОВЫЙ ЦЕНТР</div><h1 id="pageHeading">Обзор</h1></div>
+        <div class="top-actions"><div class="date-pill">◷ <span id="today"></span></div><button class="button primary" id="addTop">＋ Новая операция</button></div>
+      </header>
+
+      <section class="page active" id="dashboard">
+        <div class="welcome"><div><div class="eyebrow"><i></i> ТВОЙ ПРОГРЕСС</div><h2>Деньги под <em>контролем.</em></h2><p>Привет, Кирилл! Вот финансовая картина на сегодня.</p></div><div class="month-pill">● ТЕКУЩИЙ МЕСЯЦ</div></div>
+        <div class="stats">
+          <article class="stat-card balance"><div class="stat-head"><span>Общий баланс</span><span class="stat-symbol">◈</span></div><div class="stat-number" id="balance">0 ₸</div><div class="stat-note">Доходы минус расходы за всё время</div><div class="balance-decoration"></div></article>
+          <article class="stat-card"><div class="stat-head"><span>Доходы за месяц</span><span class="symbol green">↗</span></div><div class="stat-number" id="income">0 ₸</div><div class="stat-note"><span class="good">↗</span> Поступления в этом месяце</div></article>
+          <article class="stat-card"><div class="stat-head"><span>Расходы за месяц</span><span class="symbol coral">↘</span></div><div class="stat-number" id="expense">0 ₸</div><div class="stat-note">Потрачено в этом месяце</div></article>
+        </div>
+        <div class="grid-two">
+          <article class="panel">
+            <div class="panel-title"><div><h3>Движение средств</h3><p>Доходы и расходы за последние 6 месяцев</p></div><span class="tag">6 МЕСЯЦЕВ</span></div>
+            <div class="chart" id="chart"></div>
+            <div class="chart-legend"><span><i class="dot income-dot"></i> Доходы</span><span><i class="dot expense-dot"></i> Расходы</span></div>
+          </article>
+          <article class="panel spending">
+            <div class="panel-title"><div><h3>Расходы по категориям</h3><p>Структура трат за текущий месяц</p></div><span class="more">•••</span></div>
+            <div class="donut-wrap"><div class="donut" id="donut"><div><small>ВСЕГО</small><b id="donutTotal">0 ₸</b></div></div></div>
+            <div class="category-legend" id="categoryLegend"><div class="empty">Добавь расходы, чтобы увидеть аналитику</div></div>
+          </article>
+        </div>
+        <article class="panel recent">
+          <div class="panel-title"><div><h3>Последние операции</h3><p>Недавние движения средств</p></div><button class="link-button" data-open="transactions">Все операции →</button></div>
+          <div class="table-wrap"><table><thead><tr><th>ОПЕРАЦИЯ</th><th>КАТЕГОРИЯ</th><th>ДАТА</th><th class="right">СУММА</th></tr></thead><tbody id="recentRows"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="page" id="transactions">
+        <div class="section-head"><div><h2>Все операции</h2><p>Управляй своими доходами и расходами</p></div><button class="button primary" id="addTransaction">＋ Добавить операцию</button></div>
+        <article class="panel">
+          <div class="filters"><input id="search" class="search" placeholder="⌕  Поиск по операциям..."><select id="typeFilter"><option value="all">Все операции</option><option value="income">Доходы</option><option value="expense">Расходы</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>ОПЕРАЦИЯ</th><th>КАТЕГОРИЯ</th><th>ДАТА</th><th class="right">СУММА</th><th></th></tr></thead><tbody id="allRows"></tbody></table></div>
+          <div class="empty-state" id="emptyState">Пока нет операций. Добавь первую запись.</div>
+        </article>
+      </section>
+
+      <section class="page" id="budgets">
+        <div class="section-head"><div><h2>Мой бюджет</h2><p>Следи за расходами и сохраняй больше</p></div></div>
+        <div class="budget-grid">
+          <article class="panel budget-card"><div class="budget-icon purple">⌂</div><div class="budget-title">Ежемесячный лимит</div><div class="budget-value" id="budgetSpent">0 ₸ <small>/ 250 000 ₸</small></div><div class="progress"><i id="budgetProgress"></i></div><p id="budgetCaption">Осталось 250 000 ₸ до лимита</p><button class="link-button" id="editBudget">Изменить лимит →</button></article>
+          <article class="panel budget-card"><div class="budget-icon green-bg">✦</div><div class="budget-title">Финансовая привычка</div><h3>Записывай каждую трату</h3><p>Регулярный учёт помогает находить лишние расходы и двигаться к большим целям.</p><div class="habit-line">Маленькие шаги — большие результаты.</div></article>
+        </div>
+      </section>
+
+
+      <section class="page" id="admin">
+        <div class="section-head"><div><h2>Админ-панель</h2><p>Управление данными FINORA на этом устройстве</p></div><span class="tag">ADMIN ACCESS</span></div>
+        <div class="stats admin-stats">
+          <article class="stat-card"><div class="stat-head"><span>Всего операций</span><span class="stat-symbol">▤</span></div><div class="stat-number" id="adminCount">0</div><div class="stat-note">Записей в локальном хранилище</div></article>
+          <article class="stat-card"><div class="stat-head"><span>Общий доход</span><span class="symbol green">↗</span></div><div class="stat-number" id="adminIncome">0 ₸</div><div class="stat-note">Сумма всех доходов</div></article>
+          <article class="stat-card"><div class="stat-head"><span>Общий расход</span><span class="symbol coral">↘</span></div><div class="stat-number" id="adminExpense">0 ₸</div><div class="stat-note">Сумма всех расходов</div></article>
+        </div>
+        <article class="panel admin-panel">
+          <div class="panel-title"><div><h3>Управление операциями</h3><p>Просмотр и удаление записей</p></div><button class="button danger" id="adminClear">Удалить все данные</button></div>
+          <div class="table-wrap"><table><thead><tr><th>ОПЕРАЦИЯ</th><th>ТИП</th><th>КАТЕГОРИЯ</th><th>ДАТА</th><th class="right">СУММА</th><th></th></tr></thead><tbody id="adminRows"></tbody></table></div>
+          <div class="admin-foot">Изменения применяются к данным этого браузера и устройства.</div>
+        </article>
+      </section>
+      <section class="page" id="profile">
+        <div class="section-head"><div><h2>Профиль</h2><p>Твоя личная финансовая зона</p></div></div>
+        <article class="panel profile-card"><div class="profile-avatar">К</div><div><h3>Кирилл</h3><p>Личный аккаунт FINORA</p><span class="tag">ПОЛЬЗОВАТЕЛЬ</span></div></article>
+        <article class="panel note-panel"><h3>Данные хранятся на этом устройстве</h3><p>Это автономная HTML-версия FINORA. Операции сохраняются в браузере с помощью localStorage. Для синхронизации между устройствами и настоящих аккаунтов понадобится подключить сервер и базу данных.</p><button class="button danger" id="clearData">Очистить все данные</button></article>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modal">
+    <form class="modal" id="transactionForm">
+      <button type="button" class="modal-close" id="closeModal">×</button>
+      <div class="eyebrow"><i></i> НОВАЯ ЗАПИСЬ</div><h2>Добавить операцию</h2><p class="modal-sub">Заполни детали, чтобы обновить финансовую картину.</p>
+      <div class="type-switch"><button type="button" class="selected" data-kind="expense">Расход</button><button type="button" data-kind="income">Доход</button></div>
+      <label>Название операции<input id="txTitle" placeholder="Например, продукты" required maxlength="50"></label>
+      <div class="form-row"><label>Сумма, ₸<input id="txAmount" type="number" min="1" step="1" placeholder="5000" required></label><label>Категория<select id="txCategory"><option>Продукты</option><option>Транспорт</option><option>Покупки</option><option>Кафе</option><option>Зарплата</option><option>Подработка</option><option>Другое</option></select></label></div>
+      <label>Дата<input id="txDate" type="date" required></label>
+      <button class="button primary full" type="submit">Сохранить операцию <span>↗</span></button>
+    </form>
+  </div>
+
+  <div class="confirm-backdrop" id="clearConfirm">
+    <div class="confirm-card">
+      <div class="confirm-icon">!</div><h2>Очистить все данные?</h2>
+      <p>Все операции будут удалены, а месячный лимит вернётся к исходному значению. Это действие нельзя отменить.</p>
+      <div class="confirm-actions"><button class="button secondary" id="cancelClear">Отмена</button><button class="button danger" id="confirmClear">Да, очистить</button></div>
+    </div>
+  </div>
+  <div class="confirm-backdrop" id="adminLogin">
+    <form class="confirm-card login-card" id="adminLoginForm">
+      <div class="confirm-icon">⚙</div><h2>Вход администратора</h2>
+      <p>Введите PIN-код для доступа к панели управления.</p>
+      <label class="admin-pin-label">PIN-код<input id="adminPin" type="password" inputmode="numeric" placeholder="Введите PIN" autocomplete="current-password" required></label>
+      <div class="login-error" id="loginError"></div>
+      <div class="confirm-actions"><button class="button secondary" type="button" id="cancelAdminLogin">Отмена</button><button class="button primary" type="submit">Войти</button></div>
+      <small class="security-note">Стартовый PIN: 2468. Измените его в js/app.js перед публикацией сайта.</small>
+    </form>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
